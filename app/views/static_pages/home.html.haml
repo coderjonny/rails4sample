@@ -1,4 +1,7 @@
-%h1 Sample App
-%p This is the home page for the ror tutorial sample app.
-.hello
-  hello everybody I'm writing this in haml. Isn't that great!?!?!
+.center.hero-unit
+  %h1 Welcome to the Sample App
+  %h2
+    This is the home page for the
+    %a{:href => "http://railstutorial.org/"} Ruby on Rails Tutorial
+    sample application.
+  = link_to "Sign up now!", signup_path, class: "btn btn-large btn-primary"
