@@ -1,3 +1,24 @@
 -provide(:title, 'Sign up')
 %h1 Sign up
-%p Find me in app/views/users/new.html.haml
+%p Get exclusive access to the top performers and influencers on Instagram
+.row
+  %div.col-md-6.col-md-offset-3
+    = form_for @user, html: { class: 'form' } do |f|
+      = render 'shared/error_messages'
+      .form-group
+        = f.label :name
+        = f.text_field :name, class: "form-control"
+
+      .form-group
+        = f.label :email
+        = f.text_field :email, class: "form-control"
+
+      .form-group
+        = f.label :password
+        = f.password_field :password, class: "form-control"
+
+      .form-group
+        = f.label :password_confirmation, "Confirmation"
+        = f.password_field :password_confirmation, class: "form-control"
+
+      = f.submit "Create my account", class: "btn btn-large btn-primary"
