@@ -18,6 +18,15 @@ describe "User Pages" do
 
     it { should have_content('Sign up') }
     it { should have_title(full_title('Sign up')) }
+    it { should have_button('Create my account') }
+
+    describe "user already signed in" do
+      let(:user) { FactoryGirl.create(:user) }
+      before { sign_in user }
+      before { visit signup_path }
+
+      it { should_not have_title(full_title('Sign up')) }
+    end
 
     describe "with invalid info" do
       it "should not create a user" do
@@ -77,7 +86,8 @@ describe "User Pages" do
     describe "page" do
       it { should have_content("Update your profile") }
       it { should have_title("Edit user") }
-      it { should have_link("change", href: 'http://gravatar.com/emails') }
+      it { should have_selector("a[href='http://gravatar.com/emails'][target='_blank']")}
+      it { should have_button("Save changes")}
     end
 
     describe "with invalid info" do
@@ -102,6 +112,15 @@ describe "User Pages" do
       specify { expect(user.reload.name).to eq new_name }
       specify { expect(user.reload.email).to eq new_email }
     end
+
+    describe "forbidden attributes" do
+      let(:params) do
+        { user: { admin: true, password: user.password,
+                  password_confirmation: user.password } }
+      end
+      before { patch user_path(user), params }
+      specify { expect(user.reload).not_to be_admin }
+    end
   end
 
   describe "index" do
@@ -124,6 +143,8 @@ describe "User Pages" do
           expect(page).to have_selector('li', text: user.name)
         end
       end
+    end
+
     describe "delete links" do
       it { should_not have_link('delete') }
       describe "as an admin user" do
@@ -141,7 +162,6 @@ describe "User Pages" do
         end
         it { should_not have_link('delete', href: user_path(admin)) }
       end
-    end
 
     end
   end
